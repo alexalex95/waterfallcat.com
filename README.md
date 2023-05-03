@@ -1,6 +1,9 @@
 # waterfallcat.com
 Archived modeling website created in Wix using javascript, json, sendgrid, and other.
+
 https://brisaai.wixsite.com/waterfallcat
+
+With Waterfallcat you can apply to modeling agencies easier with one website. Check the screenshots.
 <img width="1685" alt="image" src="https://user-images.githubusercontent.com/24496399/235814047-b9e1f9e8-8f15-47b0-bf34-60dea1b4b6bc.png">
 
 <img width="1391" alt="image" src="https://user-images.githubusercontent.com/24496399/235814129-0aef53dc-c0b3-4c09-b8b8-e72a4161560a.png">
