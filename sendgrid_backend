@@ -1,0 +1,34 @@
+import sgMail from '@sendgrid/mail';
+import wixSecretsBackend from 'wix-secrets-backend';
+
+const imageToBase64=require('image-to-base64');
+
+export async function sendEmail(recipient, subject, body, photo1) {
+
+    const sendGridSecret = JSON.parse(await wixSecretsBackend.getSecret('sendGridSecret'));
+    const key = sendGridSecret.key;
+    const senderEmail = sendGridSecret.senderEmail;
+    let photo1_64=imageToBase64(photo1);
+    
+
+    sgMail.setApiKey(key);
+
+    const msg = {
+        from: senderEmail,
+        to: recipient,
+        subject: subject,
+        text: body,
+        attachments:[{
+            content:encoded,
+            filename:"photo1.jpg",
+            type:'image/jpg'
+        }]
+    };
+
+    try {
+        return await sgMail.send(msg);
+    } catch (error) {
+        console.error('Error sending the email: ' + error.message);
+        return false;
+    }
+}
