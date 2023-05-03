@@ -1,0 +1,189 @@
+import { sendMail } from 'backend/Attachments/process';
+import wixData from 'wix-data';
+import wixWindow from 'wix-window';
+import wixUsers from 'wix-users';
+import wixLocation from 'wix-location';
+
+let popup = wixWindow.lightbox.getContext();
+let modelingEmail = "";
+let personalEmail = "";
+let subject = "";
+let ccEmail = "";
+let fullName = "";
+let phone = "";
+let age = "";
+let gender = "";
+let height = "";
+let weight = "";
+let eyeColor = "";
+let hairColor = "";
+let chest = "";
+let waist = "";
+let pants = "";
+let shirt = "";
+let shoes = "";
+let instagram = "";
+let igFollowers = "";
+let tiktok = "";
+let ttFollowers = "";
+let funFact = "";
+let ethnicity = "";
+
+$w('#text20').hide();
+//-------------------------------------------------------------------------------------------------------------------------//
+$w.onReady(function () {
+    $w("#dataset1").onReady(() => {
+        $w("#dataset1").setFilter(wixData.filter().eq("title", popup))
+            .then(() => {
+                $w('#dataset3').onReady(() => {
+                    $w('#dataset3').setFilter(wixData.filter().eq("_id", wixUsers.currentUser.id))
+                        .then(() => {
+                            modelingEmail = $w('#dataset1').getCurrentItem().email;
+                            personalEmail = $w('#dataset3').getCurrentItem().customfields_system_email;
+                            let currentItem = $w('#dataset1').getCurrentItem();
+                            let currentInfo = $w('#dataset3').getCurrentItem();
+                            $w('#text15').text = currentItem.title;
+                            $w('#image1').src = currentItem.logo;
+                            fullName = currentInfo.nickname;
+                            phone = currentInfo.customfields_system_phone;
+                            age = currentInfo.custom_age;
+                            gender = currentInfo.custom_gender;
+                            height = currentInfo["custom_height-e-g-5-9"];
+                            weight = currentInfo.custom_weight;
+                            eyeColor = currentInfo["custom_eyes-color"];
+                            hairColor = currentInfo["custom_hair-color"];
+                            chest = currentInfo["custom_chest-size"];
+                            waist = currentInfo["custom_waist-size"];
+                            pants = currentInfo["custom_pants-size"];
+                            shirt = currentInfo["custom_shirt-size"];
+                            shoes = currentInfo["custom_shoe-size"];
+                            instagram = currentInfo.custom_instagram;
+                            igFollowers = currentInfo["custom_instagram-followers"];
+                            tiktok = currentInfo.custom_tiktok;
+                            ttFollowers = currentInfo["custom_tiktok-followers"];
+                            ethnicity = currentInfo.custom_ethnicity;
+                            funFact=currentInfo["custom_fun-fact"];
+                            subject = "Modeling Application from " + currentInfo.nickname;
+                            ccEmail = currentInfo.customfields_system_email;
+
+                            $w('#information').text="Full name: "+fullName+"\n"
+                            +"Phone Number: "+phone+"\n"
+                            +"Age: "+age+"\n"
+                            +"Gender: "+gender+"\n"
+                            +"Height: "+height+"\n"
+                            +"Weight: "+weight+"\n"
+                            +"Eye Color: "+eyeColor+"\n"
+                            +"Hair Color: "+hairColor+"\n"
+                            +"Chest Size: "+chest+"\n"
+                            +"Waist Size: "+waist+"\n"
+                            +"Pants Size: "+pants+"\n"
+                            +"Shirt Size: "+shirt+"\n"
+                            +"Shoes Size: "+shoes+"\n"
+                            +"Instagram: "+instagram+"\n"
+                            +"Instagram Followers: "+igFollowers+"\n"
+                            +"Tiktok: "+tiktok+"\n"
+                            +"Tiktok Followers: "+ttFollowers+"\n"
+                            +"Ethnicity: "+ethnicity+"\n"
+                            +"What makes you different?: "+funFact+"\n"
+                            +"Email: "+ccEmail+"\n";
+                            $w('#button4').onClick(upload_click);
+                        })
+                })
+            })
+    })
+})
+
+//-------------------------------------------------------------------------------------------------------------------------//
+export function upload_click(event) {
+    //let files=$w('#dataset2').getItems(0,1); this shows the data that is in the dataset
+    //console.log(files);
+    $w('#text20').show();
+    wixData.query("MyPhotos")
+        .limit(1)
+        .find()
+        .then((results) => {
+            let items = results.items;
+            const wiximageurl = "https://static.wixstatic.com/media/";
+            //let body = $w('#text17').text;
+
+            //Declaring the photo objects
+            //-------------------------------------------------------------------------------------------------------------------------//
+            let photo0 = items[0].myPhotos[0].src.replace('wix:image://v1/', '');
+            let image0Url = wiximageurl + photo0;
+            let newPhotoUrl0 = removeUrlPath(image0Url);
+
+            let photo1 = items[0].myPhotos[1].src.replace('wix:image://v1/', '');
+            let image1Url = wiximageurl + photo1;
+            let newPhotoUrl1 = removeUrlPath(image1Url);
+
+            let photo2 = items[0].myPhotos[2].src.replace('wix:image://v1/', '');
+            let image2Url = wiximageurl + photo2;
+            let newPhotoUrl2 = removeUrlPath(image2Url);
+
+            let photo3 = items[0].myPhotos[3].src.replace('wix:image://v1/', '');
+            let image3Url = wiximageurl + photo3;
+            let newPhotoUrl3 = removeUrlPath(image3Url);
+
+            let photo4 = items[0].myPhotos[4].src.replace('wix:image://v1/', '');
+            let image4Url = wiximageurl + photo4;
+            let newPhotoUrl4 = removeUrlPath(image4Url);
+
+            let photo5 = items[0].myPhotos[5].src.replace('wix:image://v1/', '');
+            let image5Url = wiximageurl + photo5;
+            let newPhotoUrl5 = removeUrlPath(image5Url);
+
+            //-------------------------------------------------------------------------------------------------------------------------//
+            //Declaring the type of photo
+            /*let photo0type=getPhotoTypeFromUrl(photo0);
+            let photo1type=getPhotoTypeFromUrl(photo1);
+            let photo2type=getPhotoTypeFromUrl(photo2);
+            let photo3type=getPhotoTypeFromUrl(photo3);
+            let photo4type=getPhotoTypeFromUrl(photo4);
+            let photo5type=getPhotoTypeFromUrl(photo5);*/
+
+            //-------------------------------------------------------------------------------------------------------------------------//
+            //Putting everything together to send the email
+
+            //let email = 'alexhrvz@gmail.com';
+            /*sendMail(newPhotoUrl0, photo0type, newPhotoUrl1, photo1type, newPhotoUrl2, photo2type, newPhotoUrl3, photo3type,newPhotoUrl4, photo4type, newPhotoUrl5, photo5type, email, subject, body, ccEmail)
+                    .then((res) => {
+                        console.log(res);
+                        $w('#text20').text="Email Sent! Redirecting to all modeling agencies...";
+                        setInterval(()=>
+                            wixLocation.to("/agencies"),2000
+                        );
+                        
+                    });*/
+            sendMail(newPhotoUrl0, newPhotoUrl1, newPhotoUrl2, newPhotoUrl3, newPhotoUrl4, newPhotoUrl5, subject, fullName, phone, age, gender, height, weight, eyeColor, hairColor, chest, waist, pants, shirt, shoes, instagram, igFollowers, tiktok, ttFollowers, modelingEmail, ccEmail, funFact, ethnicity)
+                .then((res) => {
+                    console.log(res);
+                    $w('#text20').text = "Email Sent! Redirecting to all modeling agencies...";
+                    setInterval(() => wixLocation.to("/agencies"), 2000)
+
+                })
+        })
+}
+
+//-------------------------------------------------------------------------------------------------------------------------//
+//This function gets the URL from wix (src) and returns the photo type such as png, jpg or jpeg, etc.
+function getPhotoTypeFromUrl(photoUrl) {
+    var lastDotIndex = photoUrl.lastIndexOf('.');
+    if (lastDotIndex < 0) {
+        return '';
+    }
+    var hashIndex = photoUrl.indexOf('#');
+    if (hashIndex < 0) {
+        return photoUrl.substring(lastDotIndex + 1);
+    }
+    return photoUrl.substring(lastDotIndex + 1, hashIndex);
+}
+
+//-------------------------------------------------------------------------------------------------------------------------//
+//This function counts looks for the last / in the url and then deletes it alongside with the rest of the text
+function removeUrlPath(url) {
+    const pathIndex = url.lastIndexOf('/');
+    if (pathIndex >= 0) {
+        return url.substring(0, pathIndex);
+    }
+    return url;
+}
